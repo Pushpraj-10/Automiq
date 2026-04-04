@@ -1,0 +1,9 @@
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/Pushpraj-10/Automiq-FRONTEND
+[submodule "backend"]
+	path = backend
+	url = https://github.com/Pushpraj-10/Automiq-BACKEND
+[submodule "executor"]
+	path = executor
+	url = https://github.com/Pushpraj-10/Automiq-EXECUTOR

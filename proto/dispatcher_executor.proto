@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package automiq.dispatcher;
+
+message WorkflowStep {
+  string id = 1;
+  int32 stepIndex = 2;
+  string type = 3;
+  string name = 4;
+  string configJson = 5;
+  string onFailureJson = 6;
+}
+
+message EnqueueExecutionRequest {
+  string sharedSecret = 1;
+  string correlationId = 7;
+  string executionId = 2;
+  string tenantId = 3;
+  string workflowId = 4;
+  string workflowVersionId = 5;
+  repeated WorkflowStep steps = 6;
+}
+
+message EnqueueExecutionResponse {
+  bool accepted = 1;
+  string message = 2;
+}
+
+message GetExecutionStepsRequest {
+  string sharedSecret = 1;
+  string correlationId = 4;
+  string executionId = 2;
+  int32 limit = 3;
+}
+
+message ExecutionStepItem {
+  int32 stepIndex = 1;
+  string stepType = 2;
+  string status = 3;
+  int32 attemptCount = 4;
+  string errorMessage = 5;
+  string startedAt = 6;
+  string finishedAt = 7;
+  string requestJson = 8;
+  string responseJson = 9;
+  string updatedAt = 10;
+}
+
+message GetExecutionStepsResponse {
+  bool accepted = 1;
+  string message = 2;
+  repeated ExecutionStepItem steps = 3;
+}
+
+message UpdateExecutionStatusRequest {
+  string sharedSecret = 1;
+  string correlationId = 5;
+  string executionId = 2;
+  string status = 3;
+  string errorSummary = 4;
+}
+
+message UpdateExecutionStatusResponse {
+  bool accepted = 1;
+  string message = 2;
+}
+
+message UpdateExecutionStepStatusRequest {
+  string sharedSecret = 1;
+  string correlationId = 10;
+  string executionId = 2;
+  int32 stepIndex = 3;
+  string status = 4;
+  string stepType = 5;
+  int32 attemptCount = 6;
+  string requestJson = 7;
+  string responseJson = 8;
+  string errorMessage = 9;
+}
+
+message UpdateExecutionStepStatusResponse {
+  bool accepted = 1;
+  string message = 2;
+}
+
+service ExecutorService {
+  rpc EnqueueExecution(EnqueueExecutionRequest) returns (EnqueueExecutionResponse);
+  rpc GetExecutionSteps(GetExecutionStepsRequest) returns (GetExecutionStepsResponse);
+}
+
+service DispatcherService {
+  rpc UpdateExecutionStatus(UpdateExecutionStatusRequest) returns (UpdateExecutionStatusResponse);
+  rpc UpdateExecutionStepStatus(UpdateExecutionStepStatusRequest) returns (UpdateExecutionStepStatusResponse);
+}
